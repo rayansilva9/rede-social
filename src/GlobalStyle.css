@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+button,
+input {
+  outline: none;
+}
+
+a{
+  color:unset;
+
+}
+
+.input_search_header {
+  position: relative;
+  width: 400px;
+  height: 30px;
+  padding: 0 10px;
+  background: #c9c9c958;
+  border: 0px;
+  border-radius: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+  .input_search_header {
+    display: none;
+  }
+}
+
+.input_add_comment {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  background: #c9c9c958;
+  border: 0px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
