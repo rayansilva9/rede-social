@@ -16,7 +16,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useNavigate } from 'react-router-dom'
-import * as ROUTES from '../routes'
 
 const Signup = () => {
   const navigate = useNavigate()
