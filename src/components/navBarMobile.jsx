@@ -40,15 +40,17 @@ export default function NavBarMobile() {
     transition: '0.4s linear all',
     borderRadius: ' 15px'
   }
-  const Title = document.title
-  console.log('', Title)
+
+  let a = document.title
+  const [title, setTitle] = useState(a)
+
+  const userLocal = localStorage.getItem('authUser')
 
   return (
     <Box
       sx={{
         overflow: 'hidden',
-        display: document.title != 'Login' ? 'inline' : 'none',
-        display: document.title != 'Sign-Up' ? 'inline' : 'none',
+        display: userLocal ? 'inline' : 'none',
         width: { xs: '100%', sm: '130px' },
         height: { xs: '50px', sm: '100vh' },
         position: 'fixed',

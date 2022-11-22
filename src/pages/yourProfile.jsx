@@ -20,16 +20,17 @@ export default function YourProfilePage() {
     user: { username, fullname, photo, followers, following, bio }
   } = useUser()
 
+  
   //   if (!username) {
-  //   navigate(ROUTES.LOGIN)
-  // }
-  const [anotherUser, setAnotherUser] = useState({})
-
-  const docUser = getPhotosByDocumentTitle(username).then(res => {
-    setAnotherUser(res)
-  })
-
-  let user = useUser();
+    //   navigate(ROUTES.LOGIN)
+    // }
+    const [anotherUser, setAnotherUser] = useState({})
+    
+    const docUser = getPhotosByDocumentTitle(username).then(res => {
+      setAnotherUser(res)
+    })
+    
+    let user = useUser();
   
   let userActive = useAuthListener();
   

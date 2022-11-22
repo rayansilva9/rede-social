@@ -16,10 +16,20 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useNavigate } from 'react-router-dom'
+import * as ROUTES from '../routes'
 
 const Signup = () => {
   const navigate = useNavigate()
+
+  const userLocal = localStorage.getItem('authUser')
+
+  if (userLocal) {
+    navigate(ROUTES.DASHBOARD)
+  }
+
   const { firebase } = useContext(FirebaseContext)
+
+  const [file, setFile] = useState()
 
   const [emailAddres, setEmailAddres] = useState('')
   const [password, setPassword] = useState('')
@@ -93,8 +103,9 @@ const Signup = () => {
             }
           )
         })
+        location.reload()
 
-      navigate(ROUTES.DASHBOARD)
+      // navigate(ROUTES.DASHBOARD)
     } else {
       setError('username ja existe')
     }
@@ -110,6 +121,19 @@ const Signup = () => {
     document.title = 'Sign-Up'
   }, [])
 
+  // const handleFile = e => {
+  //   const reader = new FileReader()
+
+  //   if (e.target.files[0]) {
+  //     reader.readAsDataURL(e.target.files[0])
+  //   }
+
+  //   reader.onload = readerEvent => {
+  //     setFile(readerEvent.target.result)
+  //   }
+  //   console.log(file)
+  // }
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -120,10 +144,41 @@ const Signup = () => {
           alignItems: 'center'
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          {' '}
-          <input type="file" onChange={handlePhoto} />
-        </Avatar>
+        {file ? (
+          <Avatar
+            src={photo}
+            sx={{ m: 1, bgcolor: 'secondary.main', width: 90, height: 90 }}
+          >
+            <input onChange={handlePhoto} hidden accept="image/*" type="file" />
+          </Avatar>
+        ) : (
+          <Avatar
+            src={photo}
+            sx={{ m: 1, bgcolor: 'secondary.main', width: 90, height: 90 }}
+          >
+            <Button
+              sx={{
+                bgcolor: 'transparent',
+                boxShadow: 'none'
+              }}
+              variant="contained"
+              component="label"
+            >
+              Upload
+              <input onChange={handlePhoto} hidden accept="image/*" type="file" />
+            </Button>{' '}
+          </Avatar>
+        )}
+        <Button
+          variant="outlined"
+          sx={{ display: photo ? 'inline' : 'none' }}
+          onClick={() => {
+            setPhoto(null)
+          }}
+        >
+          Remover
+        </Button>
+
         <Typography component="h1" variant="h5">
           sign up
         </Typography>
@@ -189,7 +244,7 @@ const Signup = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link to={ROUTES.LOGIN}>{"Don't have an account? Sign Up"}</Link>
+              <Link to={ROUTES.LOGIN}>{'Have an account? Sign Up'}</Link>
             </Grid>
           </Grid>
         </Box>

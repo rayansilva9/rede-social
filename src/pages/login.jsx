@@ -8,7 +8,7 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import {Link, useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -16,6 +16,14 @@ import Container from '@mui/material/Container'
 
 const Login = () => {
   const navigate = useNavigate()
+  const userLocal = localStorage.getItem('authUser')
+
+  if (userLocal) {
+    useEffect(() => {
+      return navigate(ROUTES.DASHBOARD)
+    })
+  }
+
   const { firebase } = useContext(FirebaseContext)
 
   const [emailAddres, setEmailAddres] = useState('')
@@ -30,12 +38,13 @@ const Login = () => {
 
     try {
       await firebase.auth().signInWithEmailAndPassword(emailAddres, password)
-      navigate(ROUTES.DASHBOARD)
+      location.reload()
+      // navigate(ROUTES.DASHBOARD)
     } catch (error) {
       console.log(error)
       setError(error.message)
-      setEmailAddres("")
-      setPassword("")
+      setEmailAddres('')
+      setPassword('')
     }
   }
 
@@ -57,12 +66,7 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box
-          component="form"
-          onSubmit={handleLogin}
-          noValidate
-          sx={{ mt: 1 }}
-        >
+        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -85,8 +89,17 @@ const Login = () => {
             autoComplete="current-password"
             onChange={({ target }) => setPassword(target.value)}
           />
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-          <Button disabled={isInvalid} type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            disabled={isInvalid}
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
             Sign In
           </Button>
           <Grid container>
@@ -96,9 +109,7 @@ const Login = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link to={ROUTES.SIGN_UP}>
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Link to={ROUTES.SIGN_UP}>{"Don't have an account? Sign Up"}</Link>
             </Grid>
           </Grid>
         </Box>

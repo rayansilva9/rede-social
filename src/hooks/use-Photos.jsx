@@ -1,9 +1,20 @@
 import { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import UserContext from '../context/userContext'
 import { getPhotos, getUserById } from '../services/firebase'
+import * as ROUTES from "../routes"
+import useUser from './use-User'
 
 export default function usePhotos() {
   const [photos, setPhotos] = useState(null)
+
+  const navigate = useNavigate()
+
+  const user = useUser()
+
+  if (!user) {
+   return navigate(ROUTES.LOGIN)
+  }
 
   const {
     user: { uid: userId = '' }

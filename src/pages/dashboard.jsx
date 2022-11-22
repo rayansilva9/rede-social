@@ -11,12 +11,20 @@ import * as ROUTES from "../routes"
 const Dashboard = () => {
   const navigate = useNavigate()
 
+  const user = useUser()
+
+  if (!user) {
+   return navigate(ROUTES.LOGIN)
+  }
+  // console.log(user)
+
   const { PreventFunction, Prevent } = useContext(PreventContext)
 
   useEffect(() => {
     document.title = "Home"
     PreventFunction()
-  },[Prevent])
+  }, [Prevent])
+
   return (
     <Box sx={{
       width: "100vw",
