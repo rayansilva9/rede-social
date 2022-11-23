@@ -75,11 +75,18 @@ export async function updateLoggedInUserFollowers(
 
 // RETORNA AS FOTOS COM BASE EM QUEM O USUARIO SEGUE
 
-export async function getPhotos(userId, following) {
+export async function getPhotos(userId, following ) {
   const result = await firebase
     .firestore()
     .collection('photos')
-    .where('userId', 'in', following)
+    .where('userId', 'in', following) 
+    .get()
+    
+    ||
+     firebase
+    .firestore()
+    .collection('photos')
+    .where('userId', '==', userId) 
     .get()
 
   const userFollowedPhotos = result.docs.map(photo => ({
@@ -136,7 +143,10 @@ export async function getPhotosByDocumentTitle(username) {
     .where('userId', '==', b)
     .get()
 
-  const PhotosAnotherUser = result.docs.map(item => item.data().imageSrc)
+  const PhotosAnotherUser = result.docs.map(item => ({
+    ...item.data(),
+    docId: item.id
+  }))
 
   return { docAnotherUser, PhotosAnotherUser }
 }

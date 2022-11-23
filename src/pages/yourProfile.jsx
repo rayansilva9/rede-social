@@ -8,9 +8,10 @@ import { getPhotosByDocumentTitle } from '../services/firebase'
 import PostsFromProfilePage from '../components/profile/posts'
 import { PreventContext } from '../context/prevent'
 import { useNavigate } from 'react-router-dom'
-import * as ROUTES from '../routes'
+import * as ROUTES from '../routes/routes'
 import useAuthListener from '../hooks/use-auth-listener'
 import FirebaseContext from "../context/firebase"
+import { deleteDoc, doc, db } from '../lib/firebase'
 
 export default function YourProfilePage() {
   const navigate = useNavigate()
@@ -47,9 +48,10 @@ export default function YourProfilePage() {
 
   const photos = anotherUser.PhotosAnotherUser
 
-  useEffect(() => {
     document.title = username
-  }, [username])
+  
+  const DeletPhoto = (docId) => {
+    db.collection("photos").doc(docId).delete()  };
 
   return (
     <Box
@@ -179,7 +181,7 @@ export default function YourProfilePage() {
       >
         {photos &&
           photos.map(url => {
-            return <PostsFromProfilePage imageSrc={url} />
+            return (<><PostsFromProfilePage imageSrc={url.imageSrc}  /> <Button onClick={()=>{DeletPhoto(url.docId)}} >Excluir</Button></>)
           })}
       </Box>
     </Box>

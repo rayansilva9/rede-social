@@ -1,6 +1,5 @@
 // import { useHistory } from "react-router-dom";
-import * as ROUTES from '../routes'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import FirebaseContext from '../context/firebase'
 import { doesUsernameExist } from '../services/firebase'
 import { storage } from '../lib/firebase'
@@ -16,6 +15,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useNavigate } from 'react-router-dom'
+import * as ROUTES from '../routes/routes'
 
 const Signup = () => {
   const navigate = useNavigate()
@@ -23,10 +23,14 @@ const Signup = () => {
   const userLocal = localStorage.getItem('authUser')
 
   if (userLocal) {
-    navigate(ROUTES.DASHBOARD)
+    useEffect(() => {
+      return navigate(ROUTES.DASHBOARD)
+    })
   }
 
   const { firebase } = useContext(FirebaseContext)
+
+  const bar = useRef(null)
 
   const [file, setFile] = useState()
 
@@ -34,7 +38,7 @@ const Signup = () => {
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
   const [fullname, setFullname] = useState('')
-  const [photo, setPhoto] = useState()
+  const [photo, setPhoto] = useState(null)
 
   const [error, setError] = useState('')
 
@@ -65,7 +69,7 @@ const Signup = () => {
         displayName: username
       })
 
-      await firebase
+      firebase
         .firestore()
         .collection('users')
         .add({
@@ -73,7 +77,7 @@ const Signup = () => {
           username: username.toLowerCase(),
           fullname,
           emailAddres: emailAddres.toLowerCase(),
-          following: ['XWhRhPCSrOaXTuyLSfIUTDsg7qB2'],
+          following: ['gkqqGRdFxOTlb0BoUrlTDrQoiNz1'],
           followers: [],
           dateCreated: Date.now(),
           bio: ''
@@ -83,10 +87,14 @@ const Signup = () => {
 
           upload.on(
             'state_change',
-            null,
-            err => console.log(err),
-            () => {
-              storage
+            (() => {},
+            error => {},
+            async snapshot => {
+              var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              console.log('Completo', progress)
+              bar.current.value = progress
+
+              await storage
                 .ref('avatar')
                 .child(doc.id)
                 .getDownloadURL()
@@ -98,22 +106,12 @@ const Signup = () => {
                     { merge: true }
                   )
                 })
-              console.log(doc.id)
-            }
+            })
           )
         })
-        location.reload()
-
-      // navigate(ROUTES.DASHBOARD)
     } else {
       setError('username ja existe')
     }
-    // catch (error) {
-    //   console.log(error)
-    //   setError(error.message)
-    //   setEmailAddres('')
-    //   setPassword('')
-    // }
   }
 
   useEffect(() => {
@@ -135,6 +133,7 @@ const Signup = () => {
 
   return (
     <Container component="main" maxWidth="xs">
+      <input ref={bar} type="range" value="0" min="0" max="100" />
       <Box
         sx={{
           marginTop: 8,
@@ -143,7 +142,7 @@ const Signup = () => {
           alignItems: 'center'
         }}
       >
-        {file ? (
+        {photo ? (
           <Avatar
             src={photo}
             sx={{ m: 1, bgcolor: 'secondary.main', width: 90, height: 90 }}
@@ -253,3 +252,27 @@ const Signup = () => {
 }
 
 export default Signup
+
+// upload.on(
+//   'state_change',
+//   null,
+//   err => console.log(err),
+//   (snapshot) => {
+
+//     storage
+//       .ref('avatar')
+//       .child(doc.id)
+//       .getDownloadURL()
+//       .then(photo => {
+//         firebase.firestore().collection('users').doc(doc.id).set(
+//           {
+//             photo: photo
+//           },
+//           { merge: true }
+//         )
+//       })
+//     console.log(doc.id)
+//   }
+// )
+
+// location.reload()

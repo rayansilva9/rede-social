@@ -6,7 +6,7 @@ import Sidebar from '../components/sidebar'
 import Timeline from '../components/timeline'
 import { PreventContext } from '../context/prevent'
 import useUser from '../hooks/use-User'
-import * as ROUTES from "../routes"
+import * as ROUTES from "../routes/routes"
 
 const Dashboard = () => {
   const navigate = useNavigate()
@@ -16,7 +16,6 @@ const Dashboard = () => {
   if (!user) {
    return navigate(ROUTES.LOGIN)
   }
-  // console.log(user)
 
   const { PreventFunction, Prevent } = useContext(PreventContext)
 

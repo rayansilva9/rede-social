@@ -2,7 +2,7 @@ import { Avatar } from '@mui/material'
 import { Box } from '@mui/system'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import * as ROUTES from '../../routes'
+import * as ROUTES from '../../routes/routes'
 
 export default function PostHeader({ username, photo }) {
   const navigate = useNavigate()

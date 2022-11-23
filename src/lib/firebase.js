@@ -17,6 +17,9 @@ const config = {
 
 const firebase = Firebase.initializeApp(config);
 const { FieldValue } = Firebase.firestore;
+const deleteDoc  = firebase.firestore;
+const doc  = firebase.firestore;
+const db  = firebase.firestore();
 const storage = firebase.storage("gs://redesocial-6ed52.appspot.com");
 
-export { firebase, FieldValue, storage }
+export { firebase, FieldValue, storage, deleteDoc, doc, db }

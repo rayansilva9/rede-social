@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import React, { lazy, Suspense } from 'react'
-import * as ROUTES from './routes'
+import * as ROUTES from './routes/routes'
 import useAuthListener from './hooks/use-auth-listener'
 import UserContext from './context/userContext'
 import NavBarMobile from './components/navBarMobile'
 import LoadingScreen from './pages/loading'
 import { PreventProvider } from './context/prevent'
-import PrivateRoutes from './privateRoutes'
+import PrivateRoutes from './routes/privateRoutes'
 
 const Login = lazy(() => import('./pages/login'))
 const Signup = lazy(() => import('./pages/signup'))
