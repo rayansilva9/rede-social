@@ -38,6 +38,7 @@ const Login = () => {
     console.log('errror')
     await firebase.auth().signInWithEmailAndPassword(emailAddres, password)
      navigate(ROUTES.DASHBOARD)
+    location.reload()
   }
 
   useEffect(() => {
