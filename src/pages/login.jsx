@@ -18,11 +18,11 @@ const Login = () => {
   const navigate = useNavigate()
   const userLocal = localStorage.getItem('authUser')
 
-//   if (userLocal) {
-//     useEffect(() => {
-//       return navigate(ROUTES.DASHBOARD)
-//     })
-//   }
+  // if (userLocal) {
+  //   useEffect(() => {
+  //     return navigate(ROUTES.DASHBOARD)
+  //   })
+  // }
 
   const { firebase } = useContext(FirebaseContext)
 
@@ -35,17 +35,9 @@ const Login = () => {
 
   const handleLogin = async e => {
     e.preventDefault()
-
-    try {
-      await firebase.auth().signInWithEmailAndPassword(emailAddres, password)
-      location.reload()
-      // navigate(ROUTES.DASHBOARD)
-    } catch (error) {
-      console.log(error)
-      setError(error.message)
-      setEmailAddres('')
-      setPassword('')
-    }
+    console.log('errror')
+    await firebase.auth().signInWithEmailAndPassword(emailAddres, password)
+    // navigate(ROUTES.DASHBOARD)
   }
 
   useEffect(() => {
@@ -109,7 +101,7 @@ const Login = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link to={ROUTES.SIGN_UP}>{"Não tem uma conta? Crie uma"}</Link>
+              <Link to={ROUTES.SIGN_UP}>{'Não tem uma conta? Crie uma'}</Link>
             </Grid>
           </Grid>
         </Box>
