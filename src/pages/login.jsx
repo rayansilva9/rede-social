@@ -18,11 +18,11 @@ const Login = () => {
   const navigate = useNavigate()
   const userLocal = localStorage.getItem('authUser')
 
-  // if (userLocal) {
-  //   useEffect(() => {
-  //     return navigate(ROUTES.DASHBOARD)
-  //   })
-  // }
+  if (userLocal) {
+    useEffect(() => {
+      return navigate(ROUTES.DASHBOARD)
+    })
+  }
 
   const { firebase } = useContext(FirebaseContext)
 
