@@ -5,9 +5,19 @@ import UserContext from '../../context/userContext'
 import { Box, Divider, IconButton } from '@mui/material'
 import { AiFillHeart } from 'react-icons/ai'
 import { BsHeart } from 'react-icons/bs'
+import { BsHeartFill } from 'react-icons/bs'
 import { FaRegCommentDots } from 'react-icons/fa'
+import { GoComment } from 'react-icons/go'
+import { RiSendPlaneFill } from 'react-icons/ri'
+import { FaCommentAlt } from 'react-icons/fa'
 
-export default function PostActions({ docId, totalLikes, totalComments, likedPhoto, handleFocus }) {
+export default function PostActions({
+  docId,
+  totalLikes,
+  totalComments,
+  likedPhoto,
+  handleFocus
+}) {
   const {
     user: { uid: userId = '' }
   } = useContext(UserContext)
@@ -41,9 +51,7 @@ export default function PostActions({ docId, totalLikes, totalComments, likedPho
         alignItems: '',
         justifyContent: 'left',
         gap: '10px',
-        pt: '1px',
-        pb: '2px',
-        pl: '5px'
+        m: '5px 10px'
       }}
     >
       <Box
@@ -61,18 +69,20 @@ export default function PostActions({ docId, totalLikes, totalComments, likedPho
           }}
           sx={{
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
+            gap: '10px',
             alignItems: 'center'
           }}
         >
           <IconButton
-            
             sx={{
               color: toggleLiked ? 'red' : 'black',
-              p: 0
+              p: 0,
+              transition: '0.2s all linear',
+              scale: toggleLiked ? '1.1' : '1.0'
             }}
           >
-            {toggleLiked ? <AiFillHeart /> : <BsHeart />}
+            <BsHeartFill />
           </IconButton>
           {likes}
         </Box>
@@ -80,18 +90,38 @@ export default function PostActions({ docId, totalLikes, totalComments, likedPho
           onClick={handleFocus}
           sx={{
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
+            gap: '10px',
             alignItems: 'center'
           }}
         >
           <IconButton
             sx={{
-              p: 0
+              p: 0,
+              fontSize: '25px'
             }}
           >
-            <FaRegCommentDots  />
+            <FaCommentAlt />
           </IconButton>
           {totalComments}
+        </Box>
+        <Box
+          onClick={handleFocus}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '10px',
+            alignItems: 'center'
+          }}
+        >
+          <IconButton
+            sx={{
+              p: 0,
+              fontSize: '30px'
+            }}
+          >
+            <RiSendPlaneFill />
+          </IconButton>
         </Box>
       </Box>
       <Divider />

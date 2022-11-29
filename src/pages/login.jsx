@@ -105,11 +105,11 @@ const Login = () => {
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Forgot password?
+                Esqueceu a senha?
               </Link>
             </Grid>
             <Grid item>
-              <Link to={ROUTES.SIGN_UP}>{"Don't have an account? Sign Up"}</Link>
+              <Link to={ROUTES.SIGN_UP}>{"Não tem uma conta? Crie uma"}</Link>
             </Grid>
           </Grid>
         </Box>

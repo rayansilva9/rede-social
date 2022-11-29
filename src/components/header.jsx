@@ -1,8 +1,10 @@
-import { Button, Stack, TextField } from '@mui/material'
+import { Button, IconButton, Stack, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useContext, useEffect } from 'react'
 import FirebaseContext from '../context/firebase'
 import UserContext from '../context/userContext'
+import { AiOutlineSetting } from 'react-icons/ai'
+import { HiOutlineMail } from 'react-icons/hi'
 import useUser from '../hooks/use-User'
 
 const Header = () => {
@@ -15,32 +17,28 @@ const Header = () => {
         sx={{
           position: 'fixed',
           zIndex: 99,
-          top: "0",
-          display: {xs:'flex', sm:'none',},
+          top: '0',
+          mt: '1px',
+          p:'0 10px',
+          display: { xs: 'flex', sm: 'none' },
           alignItems: 'center',
           flexDirection: 'row',
-          justifyContent: 'space-around',
+          justifyContent: 'space-between',
           height: '50px',
           width: '100vw',
-          bgcolor: 'white',
-          boxShadow: '0px 2px 9px 0px rgba(0,0,0,0.42)'
+          bgcolor: '#cdd3d98e',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '20px'
+          // boxShadow: '0px 2px 9px 0px rgba(0,0,0,0.42)'
         }}
       >
-        redesocial
-        <input className="input_search_header" placeholder="Procurar" type="text" />
-        <Button
-          sx={{
-            display:{xs:'none', sm:'inline',},
-          }}
-          variant="contained"
-          size="small"
-          color="error"
-          onClick={() => {
-            // firebase.auth().signOut()
-          }}
-        >
-          log out
-        </Button>
+        <IconButton aria-label="delete">
+          <AiOutlineSetting />
+        </IconButton>
+        <Typography>Desgram-a</Typography>
+        <IconButton aria-label="delete">
+          <HiOutlineMail />
+        </IconButton>
       </Stack>
     </>
   )

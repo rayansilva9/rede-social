@@ -3,10 +3,11 @@ import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../components/header'
 import Sidebar from '../components/sidebar'
+import Stories from '../components/stories/Stories'
 import Timeline from '../components/timeline'
 import { PreventContext } from '../context/prevent'
 import useUser from '../hooks/use-User'
-import * as ROUTES from "../routes/routes"
+import * as ROUTES from '../routes/routes'
 
 const Dashboard = () => {
   const navigate = useNavigate()
@@ -14,31 +15,39 @@ const Dashboard = () => {
   const user = useUser()
 
   if (!user) {
-   return navigate(ROUTES.LOGIN)
+    return navigate(ROUTES.LOGIN)
   }
 
   const { PreventFunction, Prevent } = useContext(PreventContext)
 
   useEffect(() => {
-    document.title = "Home"
+    document.title = 'Home'
     PreventFunction()
   }, [Prevent])
 
   return (
-    <Box sx={{
-      width: "100vw",
-      pt: "55px",
-      bgcolor:'#f4f4f4',
-    }}>
+    <Box
+      sx={{
+        width: '100vw',
+        minHeight:'100vh',
+        pt:{xs: '55px', sm:0,},
+        bgcolor: '#cdd3d9'
+      }}
+    >
       <Header />
-      <Box sx={{
-        display: "flex",
-        justifyContent: "space-around",
-        pl: { sx: 0, sm: '135px', },
-        width:'100%',
-      }}>
-        <Timeline />
-        <Sidebar />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          pl: { sx: 0, sm: '135px' },
+          width: '100%'
+        }}
+      >
+        <div>
+          <Stories />
+          <Timeline />
+        </div>
+        {/* <Sidebar /> */}
       </Box>
     </Box>
   )

@@ -18,9 +18,8 @@ input {
   outline: none;
 }
 
-a{
-  color:unset;
-
+a {
+  color: unset;
 }
 
 .input_search_header {
@@ -48,4 +47,77 @@ a{
   border: 0px;
   border-radius: 3px;
   margin-bottom: 10px;
+}
+
+.navigator {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  height: 50px;
+  background: #37373731;
+  backdrop-filter: blur(4px);
+  padding: 0 10px;
+}
+.navigator ul {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.navigator ul li {
+  position: relative;
+  z-index: 1;
+  height: 70px;
+  width: 70px;
+}
+
+.navigator ul li a {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+}
+.navigator ul li a svg {
+  position: relative;
+  display: block;
+  line-height: 75px;
+  text-align: center;
+  transition: 0.3s;
+  font-size: 30px;
+  transform: translateY(15px);
+}
+.navigator ul .active a svg {
+  transform: translateY(-15px);
+  color: aliceblue;
+}
+.navigator ul li a .text {
+  position: absolute;
+  transition: 0.3s;
+  opacity: 0;
+  transform: translateY(30px);
+}
+.navigator ul .active a .text {
+  opacity: 1;
+   transform: translateY(25px); 
+  /* color: aliceblue; */
+}
+.indicator {
+  position: absolute;
+  top: -50%;
+  height: 70px;
+  width:  70px;
+  top: -105px;
+  border-radius: 50px;
+  background: #cdd3d9;
+  border: 6px solid white; 
+}
+.base_indicator {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

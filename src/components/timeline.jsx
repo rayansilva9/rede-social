@@ -19,7 +19,11 @@ const Timeline = () => {
   return (
     <Box
       sx={{
-        mt: '20px'
+        mt: '0px',
+        mb: '40px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
       }}
     >
       {!photos ? (
@@ -29,9 +33,7 @@ const Timeline = () => {
               key={index}
               variant="rounded"
               animation="wave"
-              width={370}
-              height={670}
-              sx={{ m: '20px 0 ' }}
+              sx={{ m: '20px 0 ', width: { xs: 370, sm: 450 }, height: 670 }}
             />
           ))}
         </>
@@ -40,7 +42,7 @@ const Timeline = () => {
           content.imageSrc ? <Post key={content.docId} content={content} /> : null
         )
       ) : (
-        <p>Siga pessoas para ver fotos</p>
+          <p>Siga pessoas para ver fotos</p>
       )}
     </Box>
   )

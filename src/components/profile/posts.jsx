@@ -4,19 +4,20 @@ import YourProfilePage from '../../pages/yourProfile'
 
 export default function PostsFromProfilePage({ imageSrc }) {
   return (
-    <Box sx={{
-      width: {xs:'95%', sm: '300px',},
-      height: '500px',
-      mb:'20px',
-      
-    }}>
+    <Box
+      sx={{
+        width: { xs: '100%', sm: '300px' },
+        height: '500px',
+        mb: '20px'
+      }}
+    >
       <img
         style={{
-          width:  '100%',
-          height: '100%',
+          width: '100%',
+          height: '100%'
         }}
         src={imageSrc}
-        alt='falha ao Carregar'
+        alt="falha ao Carregar"
       />
     </Box>
   )

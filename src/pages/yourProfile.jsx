@@ -4,13 +4,13 @@ import ProfileAvatar from '../components/profile/ProfileAvatar'
 import useUser from '../hooks/use-User'
 import PropTypes from 'prop-types'
 import ProfilePosts from '../components/profile/ProfilePosts'
-import { getPhotosByDocumentTitle } from '../services/firebase'
+import { DeletPhoto, getPhotosByDocumentTitle } from '../services/firebase'
 import PostsFromProfilePage from '../components/profile/posts'
 import { PreventContext } from '../context/prevent'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../routes/routes'
 import useAuthListener from '../hooks/use-auth-listener'
-import FirebaseContext from "../context/firebase"
+import FirebaseContext from '../context/firebase'
 import { deleteDoc, doc, db } from '../lib/firebase'
 
 export default function YourProfilePage() {
@@ -21,20 +21,18 @@ export default function YourProfilePage() {
     user: { username, fullname, photo, followers, following, bio }
   } = useUser()
 
-  
   //   if (!username) {
-    //   navigate(ROUTES.LOGIN)
-    // }
-    const [anotherUser, setAnotherUser] = useState({})
-    
-    const docUser = getPhotosByDocumentTitle(username).then(res => {
-      setAnotherUser(res)
-    })
-    
-    let user = useUser();
-  
-  let userActive = useAuthListener();
-  
+  //   navigate(ROUTES.LOGIN)
+  // }
+  const [anotherUser, setAnotherUser] = useState({})
+  getPhotosByDocumentTitle(username).then(res => {
+    setAnotherUser(res)
+  })
+
+  let user = useUser()
+
+  let userActive = useAuthListener()
+
   const LogOut = () => {
     firebase.auth().signOut()
 
@@ -46,12 +44,9 @@ export default function YourProfilePage() {
     // Location.reload()
   }
 
-  const photos = anotherUser.PhotosAnotherUser
+  const { PhotosAnotherUser } = anotherUser
 
-    document.title = username
-  
-  const DeletPhoto = (docId) => {
-    db.collection("photos").doc(docId).delete()  };
+  document.title = username
 
   return (
     <Box
@@ -135,7 +130,7 @@ export default function YourProfilePage() {
                   span: { fontWeight: '100' }
                 }}
               >
-                {photos ? photos.length : ''}
+                {PhotosAnotherUser ? PhotosAnotherUser.length : ''}
                 <span>Publicações</span>
               </Typography>
               <Typography
@@ -172,16 +167,28 @@ export default function YourProfilePage() {
       </Box>
       <Box
         sx={{
-          width: { xs: '100%', sm: '60%', md: '90%' },
+          width: { xs: '100vw', sm: '60%', md: '90%' },
           display: 'flex',
+          alignItems: 'center',
           justifyContent: { xs: 'center', sm: 'unset' },
           gap: '10%',
           flexWrap: 'wrap'
         }}
       >
-        {photos &&
-          photos.map(url => {
-            return (<><PostsFromProfilePage imageSrc={url.imageSrc}  /> <Button onClick={()=>{DeletPhoto(url.docId)}} >Excluir</Button></>)
+        {PhotosAnotherUser &&
+          PhotosAnotherUser.map(url => {
+            return (
+              <div key={Math.random()}>
+                <PostsFromProfilePage imageSrc={url.imageSrc} />{' '}
+                <Button
+                  onClick={() => {
+                    DeletPhoto(url.docId)
+                  }}
+                >
+                  Excluir
+                </Button>
+              </div>
+            )
           })}
       </Box>
     </Box>

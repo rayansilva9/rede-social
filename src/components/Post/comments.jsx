@@ -1,24 +1,32 @@
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { formatDistance } from 'date-fns'
 import AddComment from './add-comment'
 import { Box } from '@mui/system'
 import { Typography } from '@mui/material'
+import UserContext from '../../context/userContext'
+import useUser from '../../hooks/use-User'
+import { deleteComment } from '../../services/firebase'
 
 export default function PostComments({
   docId,
   comments: allComments,
   posted,
-  commentInput
+  commentInput,
+  postId
 }) {
   const [comments, setComments] = useState(allComments)
   const [open, setOpen] = useState(1)
 
+  const {
+    user: { userId }
+  } = useUser()
+
   return (
-    <>
+    <div style={{ padding: '0 10px' }}>
       <Box
         sx={{
-          p: '0 10px',
+          display: comments ? 'inline' : 'none',
           maxHeight: '230px',
           overflow: 'scroll',
           bgcolor: '#c1c1c161',
@@ -42,7 +50,7 @@ export default function PostComments({
       >
         {comments.slice(0, open).map(item => (
           <Box
-            key={item.displayName + item.comment}
+            key={item.username + item.comment}
             sx={{
               m: '5px 0',
               ml: '5px',
@@ -66,12 +74,12 @@ export default function PostComments({
               >
                 <Typography
                   variant="subtitle1"
-                  key={`${item.comments}-${item.displayName}`}
+                  key={`${item.comments}-${item.username}`}
                   sx={{
                     fontWeight: 'bold'
                   }}
                 >
-                  {item.displayName}{' '}
+                  {item.username}{' '}
                   <span>
                     <Typography
                       sx={{
@@ -83,6 +91,16 @@ export default function PostComments({
                       {item.comment}
                     </Typography>
                   </span>
+                  {/* <p
+                    onClick={()=>{deleteComment(postId)}}
+                    style={{
+                      display: item.userId != userId ? 'none' : 'inline',
+                      fontSize: '13px',
+                      margin:'0 10px',
+                    }}
+                  >
+                    Excluir
+                  </p> */}
                 </Typography>
               </Box>
             </Box>
@@ -114,7 +132,7 @@ export default function PostComments({
         comments={comments}
       />
       <Typography fontSize="10px">{formatDistance(posted, new Date())} ago</Typography>
-    </>
+    </div>
   )
 }
 

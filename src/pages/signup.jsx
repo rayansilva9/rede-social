@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../routes/routes'
+import { FaDoorClosed } from 'react-icons/fa'
 
 const Signup = () => {
   const navigate = useNavigate()
@@ -80,7 +81,8 @@ const Signup = () => {
           following: ['gkqqGRdFxOTlb0BoUrlTDrQoiNz1'],
           followers: [],
           dateCreated: Date.now(),
-          bio: ''
+          bio: '',
+          checked: false
         })
         .then(doc => {
           const upload = storage.ref(`avatar/${doc.id}`).putString(photo, 'data_url')
@@ -118,19 +120,6 @@ const Signup = () => {
     document.title = 'Sign-Up'
   }, [])
 
-  // const handleFile = e => {
-  //   const reader = new FileReader()
-
-  //   if (e.target.files[0]) {
-  //     reader.readAsDataURL(e.target.files[0])
-  //   }
-
-  //   reader.onload = readerEvent => {
-  //     setFile(readerEvent.target.result)
-  //   }
-  //   console.log(file)
-  // }
-
   return (
     <Container component="main" maxWidth="xs">
       <input ref={bar} type="range" value="0" min="0" max="100" />
@@ -157,12 +146,12 @@ const Signup = () => {
             <Button
               sx={{
                 bgcolor: 'transparent',
-                boxShadow: 'none'
+                boxShadow: 'none',
               }}
               variant="contained"
               component="label"
             >
-              Upload
+              <p style={{ textAlign: 'center' }}>Escolha uma foto</p>
               <input onChange={handlePhoto} hidden accept="image/*" type="file" />
             </Button>{' '}
           </Avatar>
@@ -233,16 +222,16 @@ const Signup = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Logar
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Forgot password?
+                Esqueceu a senha?
               </Link>
             </Grid>
             <Grid item>
-              <Link to={ROUTES.LOGIN}>{'Have an account? Sign Up'}</Link>
+              <Link to={ROUTES.LOGIN}>{'Já tem uma conta? Sign Up'}</Link>
             </Grid>
           </Grid>
         </Box>

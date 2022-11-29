@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { firebase, FieldValue, storage } from '../lib/firebase'
+import { firebase, FieldValue, storage, db } from '../lib/firebase'
 
 //VERIFICA SE TEM UM USERNAME EXISTENTE
 
@@ -75,19 +75,14 @@ export async function updateLoggedInUserFollowers(
 
 // RETORNA AS FOTOS COM BASE EM QUEM O USUARIO SEGUE
 
-export async function getPhotos(userId, following ) {
-  const result = await firebase
-    .firestore()
-    .collection('photos')
-    .where('userId', 'in', following) 
-    .get()
-    
-    ||
-     firebase
-    .firestore()
-    .collection('photos')
-    .where('userId', '==', userId) 
-    .get()
+export async function getPhotos(userId, following) {
+  const result =
+    (await firebase
+      .firestore()
+      .collection('photos')
+      .where('userId', 'in', following)
+      .get()) ||
+    firebase.firestore().collection('photos').where('userId', '==', userId).get()
 
   const userFollowedPhotos = result.docs.map(photo => ({
     ...photo.data(),
@@ -122,10 +117,21 @@ export async function avatarUser(userId, photoId) {
   return postAvatar
 }
 
-export async function getPhotosByDocumentTitle(username) {
-  const [activeDocUser, setActiveDocUser] = useState({})
-  const [activePhotosUser, setActivePhotosUser] = useState({})
+// RETORNA SE O USUARIO E VERIFICADO OU NÃO
 
+export async function checkedUser(userId, photoId) {
+  const result = await firebase
+    .firestore()
+    .collection('users')
+    .where('userId', '==', photoId)
+    .get()
+
+  const [checked] = result.docs.map(doc => doc.data().checked)
+
+  return checked
+}
+
+export async function getPhotosByDocumentTitle(username) {
   const result_a = await firebase
     .firestore()
     .collection('users')
@@ -134,8 +140,6 @@ export async function getPhotosByDocumentTitle(username) {
 
   const [docAnotherUser] = result_a.docs.map(doc => doc.data())
   const [b] = result_a.docs.map(doc => doc.data().userId)
-
-  // setActiveDocUser(docAnotherUser)
 
   const result = await firebase
     .firestore()
@@ -188,3 +192,14 @@ export async function uploadPost(desc, name, postId, userId, dateCreated, file) 
       )
     })
 }
+
+export const DeletPhoto = docId => {
+  db.collection('photos').doc(docId).delete()
+}
+
+export async function deleteComment(postId) {
+  return firebase.firestore().collection('photos').doc(postId).update({
+    comments: FieldValue.arrayRemove()
+  })
+}
+//  FieldValue.arrayRemove('1')

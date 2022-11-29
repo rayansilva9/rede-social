@@ -1,6 +1,7 @@
-import { Button, Input, Paper } from '@mui/material'
+import { Button, IconButton, Input, Paper, Stack } from '@mui/material'
 import { Box } from '@mui/system'
 import { useRef, useState } from 'react'
+import { MdDelete } from 'react-icons/md'
 import useUser from '../hooks/use-User'
 import { uploadPost } from '../services/firebase'
 
@@ -8,7 +9,7 @@ const NewPostPage = () => {
   const [file, setFile] = useState()
   const [desc, setDesc] = useState()
 
-  const date = new Date();
+  const date = new Date()
 
   const {
     user: { username, fullname, photo, followers, following, bio, userId }
@@ -30,13 +31,15 @@ const NewPostPage = () => {
     if (desc && file) {
       uploadPost(desc, username, 10, userId, date[Symbol.toPrimitive]('number'), file)
       setDesc('')
-    }
-    else {
-      console.log("error")
+    } else {
+      console.log('error')
     }
   }
 
-  const handleDeleteFile = () => setFile(null)
+  const imgRef = useRef(null)
+  const handleDeleteFile = () => {
+    setFile(null), (imgRef.current.src = '')
+  }
 
   return (
     <Box
@@ -44,68 +47,90 @@ const NewPostPage = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '90vh',
-        mt: '10px',
-        ml: { sm: '135px', xs: 0 }
+        height: '100vh',
+        pb: '80px',
+        // ml: { sm: '135px', xs: 0 },
+        bgcolor: '#cdd3d9'
       }}
     >
       <Paper
         sx={{
           display: 'flex',
+          p: '20px 5px',
+          borderRadius: '2px',
+          borderBottomRightRadius: '20px',
+          borderBottomLeftRadius: ' 20px',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'space-between',
-          bgcolor: '#c9c9c9',
+          bgcolor: '#cdd3d9',
           width: '95%',
-          height: '90vh'
+          minHeight: '80vh'
         }}
       >
-        <Input
-          onChange={e => {
-            setDesc(e.target.value)
-          }}
-          placeholder="Descrição"
-        />
         {file && (
-          <img
-            style={{
-              width: '350px',
-              height: '500px'
-            }}
-            src={file}
-          />
+          <>
+            <img
+              ref={imgRef}
+              style={{
+                width: '100%',
+                height: '500px'
+              }}
+              src={file}
+            />
+            <Input
+              sx={{
+                width: '100%',
+                p:'0 5px',
+              }}
+              onChange={e => {
+                setDesc(e.target.value)
+              }}
+              placeholder="Adicione uma descrição"
+            />
+          </>
         )}
-
-        <Button
+        <Box
           sx={{
-            display: file ? 'none' : 'inline'
-          }}
-          variant="contained"
-          component="label"
-        >
-          Upload
-          <input onChange={handleFile} hidden accept="image/*" type="file" />
-        </Button>
-        <Button
-          onClick={handlePost}
-          variant="contained"
-          color="success"
-          sx={{
-            display: file ? 'inline' : 'none'
+            bgcolor: '',
+            border: '2px dashed white',
+            display: file ? 'none' : 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '80vh',
+            width: '90%'
           }}
         >
-          Enviar
-        </Button>
-        <Button
-          onClick={handleDeleteFile}
-          variant="outlined"
-          color="error"
-          sx={{
-            display: file ? 'inline' : 'none'
-          }}
-        >
-          Deletar
-        </Button>
+          <Button size="large" variant="contained" component="label">
+            Selecionar do aparelho
+            <input onChange={handleFile} hidden accept="image/*" type="file" />
+          </Button>
+        </Box>
+        <Stack direction="row" spacing={20}>
+          <Button
+            onClick={handlePost}
+            variant="outlined"
+            sx={{
+              display: file ? 'inline' : 'none'
+            }}
+          >
+            Postar
+          </Button>
+          <IconButton
+            onClick={handleDeleteFile}
+            variant="outlined"
+            color="error"
+            sx={{
+              display: file ? 'inline' : 'none',
+              height: '40px',
+              width: '40px',
+              p: 0,
+              fontSize: '30px'
+            }}
+          >
+            <MdDelete />
+          </IconButton>
+        </Stack>
       </Paper>
     </Box>
   )
