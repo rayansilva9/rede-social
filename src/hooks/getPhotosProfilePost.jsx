@@ -1,8 +1,8 @@
-import { avatarUser } from '../services/firebase'
+import { getUserProviderInfo } from '../services/firebase'
 
 async function GetPhotoProfilePost(userId, photoId) {
-  const a = await avatarUser(userId, photoId)
-  return a
+  const userInfo = await getUserProviderInfo(userId, photoId)
+  return userInfo
 }
 
 export default GetPhotoProfilePost

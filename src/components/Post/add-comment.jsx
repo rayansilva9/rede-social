@@ -6,33 +6,36 @@ import { Box } from '@mui/system'
 import { Button } from '@mui/material'
 import { useRef } from 'react'
 import useUser from '../../hooks/use-User'
-// import { FieldValue } from '../../lib/firebase'
+import { ThemeContext } from '../../context/theme'
+import { db } from '../../lib/firebase'
+import { v4 as uuidv4 } from 'uuid'
 
 export default function AddComment({ docId, comments, setComments, commentInput }) {
   const [comment, setComment] = useState('')
   const inputRef = useRef(null)
-  const { firebase, FieldValue } = useContext(FirebaseContext)
   const {
     user: { username, userId }
   } = useUser()
 
+  const docIdPost = uuidv4().slice(0, 14)
+
   function handleSubmitComment(e) {
     e.preventDefault()
 
-    setComments([...comments, { username, comment }]);
+    setComments([...comments, { name: username, comment, userId, docIdPost }])
     setComment('')
 
-    return firebase
-      .firestore()
-      .collection('photos')
-      .doc(docId)
-      .update({
-        comments: FieldValue.arrayUnion({ username, comment })
-      })
+    db.collection('photos').doc(docId).collection('comentarios').doc(docIdPost).set({
+      comment: comment,
+      docId: docIdPost,
+      name: username,
+      userId: userId
+    })
   }
+  const { darkMode } = useContext(ThemeContext)
 
   return (
-    <>
+    <div style={{ background: !darkMode ? 'white' : '' }}>
       <Box
         component="form"
         onSubmit={e => {
@@ -43,7 +46,7 @@ export default function AddComment({ docId, comments, setComments, commentInput 
           display: 'flex',
           flex: 1,
           mt: 1,
-          bgcolor: 'white',
+          bgcolor: !darkMode ? 'white' : 'black',
           width: '100%',
           height: '45px'
         }}
@@ -61,12 +64,27 @@ export default function AddComment({ docId, comments, setComments, commentInput 
           style={{
             width: '100%',
             height: '100%',
-            background: 'white'
+            background: !darkMode ? 'white' : '#101010',
+            color: !darkMode ? 'black' : 'white'
           }}
         />
-        <Button disabled={comment < 1 ? true : false}>Publicar</Button>
+
+        <Button
+          className="btn_send"
+          variant={!darkMode ? '' : 'outlined'}
+          sx={{
+            color: !darkMode ? 'black' : 'white',
+            border: !darkMode ? '1px' : 'unset',
+            ':disabled': {
+              color: !darkMode ? '' : '#666666'
+            }
+          }}
+          disabled={comment < 1 ? true : false}
+        >
+          Publicar
+        </Button>
       </Box>
-    </>
+    </div>
   )
 }
 

@@ -1,16 +1,17 @@
+import { Stack } from '@mui/material'
 import { Box } from '@mui/system'
 import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../components/header'
-import Sidebar from '../components/sidebar'
 import Stories from '../components/stories/Stories'
 import Timeline from '../components/timeline'
-import { PreventContext } from '../context/prevent'
+import { ThemeContext } from '../context/theme'
 import useUser from '../hooks/use-User'
 import * as ROUTES from '../routes/routes'
 
 const Dashboard = () => {
   const navigate = useNavigate()
+  const { darkMode, setDarkMode } = useContext(ThemeContext)
 
   const user = useUser()
 
@@ -18,20 +19,20 @@ const Dashboard = () => {
     return navigate(ROUTES.LOGIN)
   }
 
-  const { PreventFunction, Prevent } = useContext(PreventContext)
-
   useEffect(() => {
     document.title = 'Home'
-    PreventFunction()
-  }, [Prevent])
+  }, [])
 
   return (
-    <Box
+    <Stack
+      // direction={xs:'column', sm:"row",}
       sx={{
-        width: '100vw',
-        minHeight:'100vh',
-        pt:{xs: '55px', sm:0,},
-        bgcolor: '#cdd3d9'
+        width: { xs: '100vw', sm: '100vw' },
+        pl: { xs: 0, sm: '20vw' },
+        minHeight: '100vh',
+        pt: { xs: '55px', sm: 0 },
+        pb: { xs: '55px', sm: 0 },
+        bgcolor: !darkMode ? '#cdd3d9' : '#000000'
       }}
     >
       <Header />
@@ -39,7 +40,8 @@ const Dashboard = () => {
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          pl: { sx: 0, sm: '135px' },
+          pl: { sx: 0, sm: '0' },
+          pr: { xs: 0, sm: '0' },
           width: '100%'
         }}
       >
@@ -47,9 +49,8 @@ const Dashboard = () => {
           <Stories />
           <Timeline />
         </div>
-        {/* <Sidebar /> */}
       </Box>
-    </Box>
+    </Stack>
   )
 }
 

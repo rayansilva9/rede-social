@@ -2,8 +2,7 @@ import Firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 import 'firebase/compat/auth'
 import 'firebase/compat/storage'
-
-
+import 'firebase/compat/database'
 
 const config = {
   apiKey: 'AIzaSyDLa26ETtL8KPVwJ9yoJ0LbwXqI30l85Iw',
@@ -15,11 +14,12 @@ const config = {
   measurementId: 'G-EH0DW99K7P'
 }
 
-const firebase = Firebase.initializeApp(config);
-const { FieldValue } = Firebase.firestore;
-const deleteDoc  = firebase.firestore;
-const doc  = firebase.firestore;
-const db  = firebase.firestore();
-const storage = firebase.storage("gs://redesocial-6ed52.appspot.com");
+const firebase = Firebase.initializeApp(config)
+const { FieldValue } = Firebase.firestore
+const deleteDoc = firebase.firestore
+const doc = firebase.firestore
+const db = firebase.firestore()
+const storage = firebase.storage('gs://redesocial-6ed52.appspot.com')
+const database = firebase.database()
 
-export { firebase, FieldValue, storage, deleteDoc, doc, db }
+export { firebase, FieldValue, storage, deleteDoc, doc, db, database }

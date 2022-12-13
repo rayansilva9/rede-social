@@ -4,16 +4,16 @@ import Suggestion from './suggestion'
 
 const Sidebar = () => {
   const {
-    user: { fullname, username, userId, following, docId }
+    user: { userId, following, docId }
   } = useUser()
   return (
     <Box
       sx={{
         display: { xs: 'none', sm: 'flex' },
-        flexDirection: "column",
-        gap:2,
-        maxHeight: "400px",
-        width:'auto',
+        flexDirection: 'column',
+        gap: 2,
+        maxHeight: '400px',
+        width: 'auto'
       }}
     >
       <Suggestion userId={userId} following={following} loggedInUserDocId={docId} />

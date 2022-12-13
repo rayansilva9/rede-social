@@ -4,6 +4,7 @@
   box-sizing: border-box;
   list-style: none;
   text-decoration: none;
+  transition: all 0.1s linear;
 }
 html {
   scroll-behavior: smooth;
@@ -11,6 +12,10 @@ html {
 
 html::-webkit-scrollbar {
   display: none;
+}
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
@@ -21,6 +26,43 @@ input {
 a {
   color: unset;
 }
+.swiper {
+  height: 40vh;
+}
+.swiper-wrapper {
+  align-items: center;
+}
+
+span.swiper-pagination-bullet {
+  background-color: #fff;
+}
+
+span.swiper-pagination-bullet-active {
+  background-color: blue;
+}
+
+div.swiper-button-prev,
+div.swiper-button-next {
+  color: white;
+  padding: 0;
+}
+div.swiper-button-prev::after {
+  content: '';
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  clip-path: polygon(50% 0%, 21% 46%, 21% 54%, 51% 100%, 0 52%);
+  -webkit-clip-path: polygon(50% 0%, 21% 46%, 21% 54%, 51% 100%, 0 52%);
+}
+div.swiper-button-next::after {
+  content: '';
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  clip-path: polygon(50% 0%, 21% 46%, 21% 54%, 51% 100%, 0 52%);
+  -webkit-clip-path: polygon(50% 0%, 21% 46%, 21% 54%, 51% 100%, 0 52%);
+  transform: rotate(180deg);
+}
 
 .input_search_header {
   position: relative;
@@ -30,9 +72,13 @@ a {
   background: #c9c9c958;
   border: 0px;
   border-radius: 10px;
+  z-index: 15;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 420px) {
+  .swiper {
+    height: 30vh;
+  }
   .input_search_header {
     display: none;
   }
@@ -103,21 +149,60 @@ a {
 }
 .navigator ul .active a .text {
   opacity: 1;
-   transform: translateY(25px); 
+  transform: translateY(25px);
   /* color: aliceblue; */
 }
 .indicator {
   position: absolute;
   top: -50%;
   height: 70px;
-  width:  70px;
+  width: 70px;
   top: -105px;
   border-radius: 50px;
   background: #cdd3d9;
-  border: 6px solid white; 
+  border: 6px solid white;
 }
 .base_indicator {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+#modal_posts {
+  animation: showModal 0.2s ease;
+}
+
+@keyframes showModal {
+  from {
+    width: 75vw;
+    background-color: transparent;
+  }
+  to {
+    width: 95vw;
+    background-color: #ffffffee;
+  }
+}
+
+#openPerfilEdit {
+  animation: linear 0.2s showOpenPerfilEdit;
+}
+
+@keyframes showOpenPerfilEdit {
+  0% {
+    left: -150%;
+    background-color: transparent;
+  }
+  /* to { */
+}
+
+#vids {
+  max-width: 500px;
+  position: absolute;
+}
+@media only screen and (max-width: 420px) {
+  #vids {
+    position: absolute;
+    max-width: 100vw;
+    min-height: 100vh;
+  }
 }

@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { firebase, FieldValue, storage, db } from '../lib/firebase'
+import { firebase, FieldValue, storage, db, deleteDoc } from '../lib/firebase'
 
 //VERIFICA SE TEM UM USERNAME EXISTENTE
 
@@ -76,13 +75,11 @@ export async function updateLoggedInUserFollowers(
 // RETORNA AS FOTOS COM BASE EM QUEM O USUARIO SEGUE
 
 export async function getPhotos(userId, following) {
-  const result =
-    (await firebase
-      .firestore()
-      .collection('photos')
-      .where('userId', 'in', following)
-      .get()) ||
-    firebase.firestore().collection('photos').where('userId', '==', userId).get()
+  const result = await firebase
+    .firestore()
+    .collection('photos')
+    .where('userId', 'in', following)
+    .get()
 
   const userFollowedPhotos = result.docs.map(photo => ({
     ...photo.data(),
@@ -105,16 +102,21 @@ export async function getPhotos(userId, following) {
 
 // RETORNA A ATUAL FOTO DE PERFIL DO USUARIO AO POST
 
-export async function avatarUser(userId, photoId) {
+export async function getUserProviderInfo(userId, itemId) {
   const result = await firebase
     .firestore()
     .collection('users')
-    .where('userId', '==', photoId)
+    .where('userId', '==', itemId)
     .get()
 
-  const [postAvatar] = result.docs.map(doc => doc.data().photo)
+  const [userProviderInfo] = result.docs.map(doc => ({
+    username: doc.data().username,
+    photo: doc.data().photo,
+    checked: doc.data().checked,
+    userId:doc.data().userId,
+  }))
 
-  return postAvatar
+  return userProviderInfo
 }
 
 // RETORNA SE O USUARIO E VERIFICADO OU NÃO
@@ -123,7 +125,7 @@ export async function checkedUser(userId, photoId) {
   const result = await firebase
     .firestore()
     .collection('users')
-    .where('userId', '==', photoId)
+    .where('userId', '==', userId)
     .get()
 
   const [checked] = result.docs.map(doc => doc.data().checked)
@@ -131,75 +133,95 @@ export async function checkedUser(userId, photoId) {
   return checked
 }
 
-export async function getPhotosByDocumentTitle(username) {
-  const result_a = await firebase
-    .firestore()
-    .collection('users')
-    .where('username', '==', username)
-    .get()
-
-  const [docAnotherUser] = result_a.docs.map(doc => doc.data())
-  const [b] = result_a.docs.map(doc => doc.data().userId)
-
-  const result = await firebase
-    .firestore()
-    .collection('photos')
-    .where('userId', '==', b)
-    .get()
-
-  const PhotosAnotherUser = result.docs.map(item => ({
-    ...item.data(),
-    docId: item.id
-  }))
-
-  return { docAnotherUser, PhotosAnotherUser }
-}
-
-export async function uploadPost(desc, name, postId, userId, dateCreated, file) {
-  await firebase
-    .firestore()
-    .collection('photos')
-    .add({
-      caption: desc,
-      name: name,
-      postId: postId,
-      userId: userId,
-      dateCreated: dateCreated,
-      comments: [],
-      likes: []
-    })
-    .then(doc => {
-      const upload = storage.ref(`posts/${doc.id}`).putString(file, 'data_url')
-
-      upload.on(
-        'state_change',
-        null,
-        err => console.log(err),
-        () => {
-          storage
-            .ref('posts')
-            .child(doc.id)
-            .getDownloadURL()
-            .then(file => {
-              firebase.firestore().collection('photos').doc(doc.id).set(
-                {
-                  imageSrc: file
-                },
-                { merge: true }
-              )
-            })
-        }
-      )
-    })
-}
+//  DELETAR FOTO
 
 export const DeletPhoto = docId => {
   db.collection('photos').doc(docId).delete()
 }
 
-export async function deleteComment(postId) {
-  return firebase.firestore().collection('photos').doc(postId).update({
-    comments: FieldValue.arrayRemove()
-  })
+// export async function deleteComment(postId) {
+//   return firebase.firestore().collection('photos').doc(postId).update({
+//     comments:
+//   })
+// }
+
+// RETORNA USUARIOS NA SEARCH
+
+export const getUserSearch = async setUsername => {
+  const result = await firebase
+    .firestore()
+    .collection('users')
+    .where('username', '==', setUsername)
+    .get()
+
+  const [allUsers] = result.docs.map(doc => ({
+    ...doc.data()
+  }))
+  // , doc.data().fullname, doc.data().photo)
+  // console.log(allUsers)
+
+  return allUsers
 }
-//  FieldValue.arrayRemove('1')
+export const deleteComment = async (docPostId, docId) => {
+  db.collection('photos').doc(docPostId).collection('comentarios').doc(docId).delete()
+}
+export const getComments = async docPostId => {
+  const result = firebase
+    .firestore()
+    .collection('photos')
+    .doc(docPostId)
+    .collection('comentarios')
+    .get()
+
+  const comentarios = (await result).docs.map(doc => doc.data())
+
+  return comentarios
+}
+
+export async function atualizar_meu_doc_quem_eu_sigo(
+  MeuDocId,
+  Target_Id,
+  isFollowingTarget
+) {
+  return firebase
+    .firestore()
+    .collection('users')
+    .doc(MeuDocId)
+    .update({
+      following: isFollowingTarget
+        ? FieldValue.arrayRemove(Target_Id)
+        : FieldValue.arrayUnion(Target_Id)
+    })
+}
+
+export async function atualizar_meu_doc_quem_vou_seguir(
+  Target_DocId,
+  MeuId,
+  isFollowingProfile
+) {
+  return firebase
+    .firestore()
+    .collection('users')
+    .doc(Target_DocId)
+    .update({
+      followers: isFollowingProfile
+        ? FieldValue.arrayRemove(MeuId)
+        : FieldValue.arrayUnion(MeuId)
+    })
+}
+
+export const getPostViewById = async postId => {
+  const result = await firebase
+    .firestore()
+    .collection('photos')
+    .where('postId', '==', postId)
+    .get()
+
+  const result2 = result.docs.map(doc => ({
+    ...doc.data()
+  }))
+  const post = result2
+  console.log(post)
+
+  return post
+}

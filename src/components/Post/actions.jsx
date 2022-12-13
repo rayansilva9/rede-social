@@ -2,7 +2,7 @@ import { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import FirebaseContext from '../../context/firebase'
 import UserContext from '../../context/userContext'
-import { Box, Divider, IconButton } from '@mui/material'
+import { Box, Divider, IconButton, Typography } from '@mui/material'
 import { AiFillHeart } from 'react-icons/ai'
 import { BsHeart } from 'react-icons/bs'
 import { BsHeartFill } from 'react-icons/bs'
@@ -10,13 +10,16 @@ import { FaRegCommentDots } from 'react-icons/fa'
 import { GoComment } from 'react-icons/go'
 import { RiSendPlaneFill } from 'react-icons/ri'
 import { FaCommentAlt } from 'react-icons/fa'
+import { ThemeContext } from '../../context/theme'
+import { useMemo } from 'react'
 
 export default function PostActions({
   docId,
   totalLikes,
   totalComments,
   likedPhoto,
-  handleFocus
+  handleFocus,
+  contatador
 }) {
   const {
     user: { uid: userId = '' }
@@ -25,6 +28,13 @@ export default function PostActions({
   const [toggleLiked, setToggleLiked] = useState(likedPhoto)
   const [likes, setlikes] = useState(totalLikes)
   const { firebase, FieldValue } = useContext(FirebaseContext)
+
+  // useMemo(() => {
+  //   setTimeout(() => {
+  //     setlikes(totalLikes)
+  //     setToggleLiked(likedPhoto)
+  //   }, 250)
+  // }, [likedPhoto, totalLikes])
 
   const handleToggleLiked = async () => {
     setToggleLiked(toggleLiked => !toggleLiked)
@@ -42,6 +52,8 @@ export default function PostActions({
     setlikes(likes => (toggleLiked ? likes - 1 : likes + 1))
   }
 
+  const { darkMode, setDarkMode } = useContext(ThemeContext)
+
   return (
     <Box
       sx={{
@@ -50,8 +62,8 @@ export default function PostActions({
         flexDirection: 'column',
         alignItems: '',
         justifyContent: 'left',
-        gap: '10px',
-        m: '5px 10px'
+        m: '5px 10px',
+        fontFamily: "'Comfortaa', cursive"
       }}
     >
       <Box
@@ -61,6 +73,8 @@ export default function PostActions({
           alignItems: 'center',
           justifyContent: 'left',
           gap: '20px'
+
+          // bgcolor:'white',
         }}
       >
         <Box
@@ -75,16 +89,30 @@ export default function PostActions({
           }}
         >
           <IconButton
+            className="fromDarkTheme"
             sx={{
-              color: toggleLiked ? 'red' : 'black',
+              display: !darkMode ? 'none' : 'flex',
+              color: toggleLiked ? 'red' : 'grey',
               p: 0,
               transition: '0.2s all linear',
-              scale: toggleLiked ? '1.1' : '1.0'
+              scale: toggleLiked ? '1.1' : '.0'
             }}
           >
             <BsHeartFill />
           </IconButton>
-          {likes}
+          <IconButton
+            className="fromLightTheme"
+            sx={{
+              display: !darkMode ? 'flex' : 'none',
+              color: toggleLiked ? 'red' : 'black',
+              p: '0',
+              transition: '.1s all linear',
+              fontSize: '1.4rem'
+            }}
+          >
+            <BsHeartFill />
+          </IconButton>
+          <p style={{ color: !darkMode ? 'black' : 'white' }}>{likes}</p>
         </Box>
         <Box
           onClick={handleFocus}
@@ -93,17 +121,21 @@ export default function PostActions({
             flexDirection: 'row',
             gap: '10px',
             alignItems: 'center'
+            // color: !darkMode ? 'black' : 'white'
           }}
         >
           <IconButton
             sx={{
               p: 0,
-              fontSize: '25px'
+              fontSize: '1.4rem',
+              color: !darkMode ? 'black' : 'grey'
             }}
           >
             <FaCommentAlt />
           </IconButton>
-          {totalComments}
+          <Typography color={!darkMode ? 'black' : 'white'} variant="p">
+            {totalComments}
+          </Typography>
         </Box>
         <Box
           onClick={handleFocus}
@@ -117,7 +149,8 @@ export default function PostActions({
           <IconButton
             sx={{
               p: 0,
-              fontSize: '30px'
+              fontSize: '1.6rem',
+              color: !darkMode ? 'black' : 'grey'
             }}
           >
             <RiSendPlaneFill />

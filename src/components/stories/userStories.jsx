@@ -1,12 +1,11 @@
-import { Avatar, Stack } from '@mui/material'
-import { Box } from '@mui/system'
+import { Avatar } from '@mui/material'
 
 const UserStories = () => {
   return (
     <div
       style={{
         border: '3px solid cyan',
-        borderRadius: '50%',
+        borderRadius: '50%'
       }}
     >
       <Avatar

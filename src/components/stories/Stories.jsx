@@ -1,5 +1,4 @@
 import { Box } from '@mui/material'
-import { Stack } from '@mui/system'
 import UserStories from './userStories'
 
 const Stories = () => {

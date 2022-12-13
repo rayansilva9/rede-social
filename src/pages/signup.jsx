@@ -17,6 +17,7 @@ import Container from '@mui/material/Container'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../routes/routes'
 import { FaDoorClosed } from 'react-icons/fa'
+// import Camera_icon from '../assets/camera-icon.png'
 
 const Signup = () => {
   const navigate = useNavigate()
@@ -82,7 +83,16 @@ const Signup = () => {
           followers: [],
           dateCreated: Date.now(),
           bio: '',
-          checked: false
+          checked: false,
+          banner: ''
+        })
+        .then(doc => {
+          firebase.firestore().collection('users').doc(doc.id).set(
+            {
+              docId: doc.id
+            },
+            { merge: true }
+          )
         })
         .then(doc => {
           const upload = storage.ref(`avatar/${doc.id}`).putString(photo, 'data_url')
@@ -101,12 +111,12 @@ const Signup = () => {
                 .child(doc.id)
                 .getDownloadURL()
                 .then(photo => {
-                  firebase.firestore().collection('users').doc(doc.id).set(
-                    {
-                      photo: photo
-                    },
-                    { merge: true }
-                  )
+                    firebase.firestore().collection('users').doc(doc.id).set(
+                      {
+                        photo: photo
+                      },
+                      { merge: true }
+                    )
                 })
             })
           )
@@ -122,7 +132,6 @@ const Signup = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <input ref={bar} type="range" value="0" min="0" max="100" />
       <Box
         sx={{
           marginTop: 8,
@@ -141,17 +150,23 @@ const Signup = () => {
         ) : (
           <Avatar
             src={photo}
-            sx={{ m: 1, bgcolor: 'secondary.main', width: 90, height: 90 }}
+            sx={{
+              m: 1,
+              bgcolor: 'secondary.main',
+              width: 90,
+              height: 90,
+              bgcolor: 'transparent'
+            }}
           >
             <Button
               sx={{
                 bgcolor: 'transparent',
-                boxShadow: 'none',
+                boxShadow: 'none'
               }}
               variant="contained"
               component="label"
             >
-              <p style={{ textAlign: 'center' }}>Escolha uma foto</p>
+              <img height="50px" src="src\assets\camera-icon-removebg-preview.png" />
               <input onChange={handlePhoto} hidden accept="image/*" type="file" />
             </Button>{' '}
           </Avatar>
@@ -177,6 +192,7 @@ const Signup = () => {
             id="username"
             label="username"
             value={username}
+            autoComplete="username"
             autoFocus
             onChange={({ target }) => setUsername(target.value)}
           />
@@ -185,7 +201,7 @@ const Signup = () => {
             required
             fullWidth
             id="Fullname"
-            label="Fullname"
+            label="Nome Completo"
             value={fullname}
             onChange={({ target }) => setFullname(target.value)}
           />
@@ -194,7 +210,7 @@ const Signup = () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             value={emailAddres}
             autoComplete="email"
             onChange={({ target }) => setEmailAddres(target.value)}
@@ -205,22 +221,18 @@ const Signup = () => {
             required
             fullWidth
             value={password}
-            label="Password"
+            label="Senha"
             type="password"
             id="password"
             autoComplete="current-password"
             onChange={({ target }) => setPassword(target.value)}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button
             disabled={isInvalid}
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, bgcolor: '#004cff' }}
           >
             Logar
           </Button>

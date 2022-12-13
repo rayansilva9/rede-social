@@ -1,20 +1,19 @@
-import { Skeleton } from '@mui/material'
+import { Skeleton, Stack } from '@mui/material'
 import { Box } from '@mui/system'
+import { useRef } from 'react'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ThemeContext } from '../context/theme'
 import usePhotos from '../hooks/use-Photos'
 import useUser from '../hooks/use-User'
-import { avatarUser } from '../services/firebase'
+import useLazyLoad from '../hooks/useLoadLazy'
 import Post from './post'
+import clsx from 'clsx'
 
 const Timeline = () => {
-  const navigate = useNavigate()
-
-  const user = useUser()
-  const {
-    user: { username, fullname, docId, userPhoto }
-  } = useUser()
-
   const { photos } = usePhotos()
+
+  const { darkMode, setDarkMode } = useContext(ThemeContext)
 
   return (
     <Box
@@ -29,20 +28,45 @@ const Timeline = () => {
       {!photos ? (
         <>
           {[...new Array(4)].map((_, index) => (
-            <Skeleton
-              key={index}
-              variant="rounded"
-              animation="wave"
-              sx={{ m: '20px 0 ', width: { xs: 370, sm: 450 }, height: 670 }}
-            />
+            <Stack key={index} sx={{ p: '30px 0' }}>
+              <Stack direction="row" spacing="10px" animation="wave">
+                <Skeleton
+                  variant="circular"
+                  sx={{
+                    width: '40px',
+                    height: '40px',
+                    bgcolor: !darkMode ? '' : '#bdbdbd5f'
+                  }}
+                />
+                <Skeleton
+                  variant="retangular"
+                  animation="wave"
+                  sx={{
+                    flex: '1',
+                    height: '40px',
+                    bgcolor: !darkMode ? '' : '#bdbdbd5f'
+                  }}
+                />
+              </Stack>
+              <Skeleton
+                variant="rounded"
+                animation="wave"
+                sx={{
+                  m: '20px 0 ',
+                  width: { xs: 370, sm: 450 },
+                  height: 500,
+                  bgcolor: !darkMode ? '' : '#bdbdbd5f'
+                }}
+              />
+            </Stack>
           ))}
         </>
       ) : photos?.length > 0 ? (
-        photos.map(content =>
-          content.imageSrc ? <Post key={content.docId} content={content} /> : null
-        )
+        photos.map(content => <Post key={content.docId} content={content} />)
       ) : (
-          <p>Siga pessoas para ver fotos</p>
+        <p style={{ color: !darkMode ? 'black' : '#ccc' }}>
+          Siga pessoas para ver fotos
+        </p>
       )}
     </Box>
   )

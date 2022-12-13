@@ -2,19 +2,19 @@ import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserContext from '../context/userContext'
 import { getPhotos, getUserById } from '../services/firebase'
-import * as ROUTES from "../routes/routes"
 import useUser from './use-User'
+import * as ROUTES from '../routes/routes'
 
 export default function usePhotos() {
   const [photos, setPhotos] = useState(null)
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
-  const user = useUser()
+  // const user = useUser()
 
-  if (!user) {
-   return navigate(ROUTES.LOGIN)
-  }
+  // if (!user) {
+  //   return navigate(ROUTES.LOGIN)
+  // }
 
   const {
     user: { uid: userId = '' }
@@ -24,7 +24,7 @@ export default function usePhotos() {
     async function getTimeLinePhotos() {
       const [{ following }] = await getUserById(userId)
 
-      let followedUserPhoto = [];
+      let followedUserPhoto = []
 
       if (following.length > 0) {
         followedUserPhoto = await getPhotos(userId, following)

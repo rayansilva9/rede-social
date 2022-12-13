@@ -1,7 +1,11 @@
 import { Box, Divider, Typography } from '@mui/material'
 import PropTypes from 'prop-types'
+import { useContext } from 'react'
+import { ThemeContext } from '../../context/theme'
 
 export default function PostFooter({ caption, username }) {
+  const { darkMode, setDarkMode } = useContext(ThemeContext)
+
   return (
     <>
       <Box
@@ -13,11 +17,18 @@ export default function PostFooter({ caption, username }) {
           mb: '5px'
         }}
       >
-        <Typography fontWeight="bold">{username}</Typography>
+        <Typography color={!darkMode ? 'black' : 'white'} fontWeight="bold">
+          {username}
+        </Typography>
 
-        <Typography sx={{
-          wordBreak:'break-all',
-        }}>{caption}</Typography>
+        <Typography
+          color={!darkMode ? 'black' : '#e3e0e0'}
+          sx={{
+            wordBreak: 'break-all'
+          }}
+        >
+          {caption}
+        </Typography>
       </Box>
       <Divider sx={{ borderColor: '#0000001e', m: '0 auto', width: '95%' }} />
     </>

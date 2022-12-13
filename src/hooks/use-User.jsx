@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import UserContext from '../context/userContext'
 import { getUserById } from '../services/firebase'
 
-
 //  RETORNA O DOCUMENTO DO USUARIO
 
 export default function useUser() {
@@ -11,7 +10,7 @@ export default function useUser() {
 
   useEffect(() => {
     async function getUserObjById() {
-      const [ response ] = await getUserById(user.uid)
+      const [response] = await getUserById(user.uid)
       setActiveUser(response)
     }
     if (user?.uid) {

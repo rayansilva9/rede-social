@@ -18,18 +18,16 @@ const Login = () => {
   const navigate = useNavigate()
   const userLocal = localStorage.getItem('authUser')
 
-//   if (userLocal) {
-//     useEffect(() => {
-//       return navigate(ROUTES.DASHBOARD)
-//     })
-//   }
+  if (userLocal) {
+    useEffect(() => {
+      return navigate(ROUTES.DASHBOARD)
+    })
+  }
 
   const { firebase } = useContext(FirebaseContext)
 
   const [emailAddres, setEmailAddres] = useState('')
   const [password, setPassword] = useState('')
-
-  const [error, setError] = useState('')
 
   const isInvalid = password === '' || emailAddres === ''
 
@@ -37,8 +35,7 @@ const Login = () => {
     e.preventDefault()
     console.log('errror')
     await firebase.auth().signInWithEmailAndPassword(emailAddres, password)
-     navigate(ROUTES.DASHBOARD)
-    location.reload()
+    setTimeout(location.reload(), 2000)
   }
 
   useEffect(() => {
@@ -46,7 +43,16 @@ const Login = () => {
   }, [])
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        justifyContent: 'space-between'
+      }}
+      component="main"
+      maxWidth="xs"
+    >
       <Box
         sx={{
           marginTop: 8,
@@ -65,7 +71,7 @@ const Login = () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             autoFocus
@@ -76,15 +82,11 @@ const Login = () => {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Senha"
             type="password"
             id="password"
             autoComplete="current-password"
             onChange={({ target }) => setPassword(target.value)}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
           />
           <Button
             disabled={isInvalid}
@@ -106,6 +108,11 @@ const Login = () => {
             </Grid>
           </Grid>
         </Box>
+      </Box>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', pb: '10px' }}>
+        <Typography fontWeight="300" variant="p">
+          2022-2022 Rayan Silva. All Rights Reserved.&copy;
+        </Typography>
       </Box>
     </Container>
   )
