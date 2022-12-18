@@ -9,8 +9,9 @@ import { Stack, Typography } from '@mui/material'
 import Swiper from 'swiper'
 import { VidsContext } from '../../context/vidsCurrentContext'
 import { v4 as uuidv4 } from 'uuid'
+import PropTypes from 'prop-types'
 
-const Vids = ({ url }) => {
+const Vids = ({ url, likes, comments, id, docPostId }) => {
   const pathname = window.location.pathname
 
   var res = pathname.split('/')
@@ -41,7 +42,8 @@ const Vids = ({ url }) => {
   }
 
   useEffect(() => {
-    setCurrentVid(uuidv4())
+    history.pushState({}, null, `/vids/${docPostId}`)
+    setCurrentVid(id)
     if (isVisibileVideo) {
       if (!playing) {
         videoRef.current.play()
@@ -59,7 +61,7 @@ const Vids = ({ url }) => {
     setOpenComments(true)
     setOpenedComment(true)
   }
- 
+
   return (
     <>
       <Box
@@ -81,7 +83,7 @@ const Vids = ({ url }) => {
           controls
           id="vids"
           style={{}}
-          src="https://firebasestorage.googleapis.com/v0/b/redesocial-6ed52.appspot.com/o/ssstik.io_1670900828376.mp4?alt=media&token=e49a4d88-cb06-488b-ae5c-6a11d840b292"
+          src={url}
         />
         <Stack
           alignItems="center"
@@ -95,7 +97,7 @@ const Vids = ({ url }) => {
         >
           <Stack alignItems="center" sx={{ svg: { fontSize: '2rem' } }}>
             <BsHeart />
-            <Typography>20k</Typography>
+            <Typography>{likes}</Typography>
           </Stack>
           <Stack
             onClick={handleOpenComments}
@@ -103,7 +105,7 @@ const Vids = ({ url }) => {
             sx={{ svg: { fontSize: '2rem' } }}
           >
             <BsHeart />
-            <Typography>2022</Typography>
+            <Typography>{comments}</Typography>
           </Stack>
           <Stack alignItems="center" sx={{ svg: { fontSize: '2rem' } }}>
             <BsHeart />
@@ -116,3 +118,10 @@ const Vids = ({ url }) => {
 }
 
 export default Vids
+
+Vids.PropTypes = {
+  url: PropTypes.string.isRequired,
+  docPostId: PropTypes.string.isRequired,
+  likes: PropTypes.array.isRequired,
+  comments: PropTypes.array.isRequired
+}

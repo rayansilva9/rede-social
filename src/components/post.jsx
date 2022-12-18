@@ -30,7 +30,7 @@ export default function Post({ content }) {
 
   useMemo(async () => {
     getUserProviderInfo(content.photoId, content.userId).then(res => setUserInfo(res))
-    getComments(content.docPostId).then(res => setComments(res))
+    getComments('photos', content.docPostId).then(res => setComments(res))
   }, [])
 
   const { darkMode } = useContext(ThemeContext)

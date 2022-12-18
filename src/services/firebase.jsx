@@ -113,7 +113,7 @@ export async function getUserProviderInfo(userId, itemId) {
     username: doc.data().username,
     photo: doc.data().photo,
     checked: doc.data().checked,
-    userId:doc.data().userId,
+    userId: doc.data().userId
   }))
 
   return userProviderInfo
@@ -165,15 +165,31 @@ export const getUserSearch = async setUsername => {
 export const deleteComment = async (docPostId, docId) => {
   db.collection('photos').doc(docPostId).collection('comentarios').doc(docId).delete()
 }
-export const getComments = async docPostId => {
+export const deleteVidsComment = async (docPostId, docId) => {
+  db.collection('vids').doc(docPostId).collection('comentarios').doc(docId).delete()
+}
+export const getComments = async (collection, docPostId) => {
   const result = firebase
     .firestore()
-    .collection('photos')
+    .collection(collection)
     .doc(docPostId)
     .collection('comentarios')
     .get()
 
   const comentarios = (await result).docs.map(doc => doc.data())
+
+  return comentarios
+}
+export const getVidsComments = async docPostId => {
+  const result = firebase
+    .firestore()
+    .collection('vids')
+    .doc(docPostId)
+    .collection('comentarios')
+    .get()
+
+  const comentarios = (await result).docs.map(doc => doc.data())
+  console.log(comentarios)
 
   return comentarios
 }

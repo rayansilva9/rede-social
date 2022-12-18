@@ -451,6 +451,9 @@ export default function ProfilePage() {
           </Stack>
         </Stack>
         <button
+          onClick={() => {
+            history.pushState({}, null, 'oiii')
+          }}
           style={{
             width: '10rem',
             height: '30px',

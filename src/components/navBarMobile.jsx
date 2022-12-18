@@ -10,7 +10,6 @@ import { BsPlusSquare } from 'react-icons/bs'
 import { BsPlusSquareFill } from 'react-icons/bs'
 import useUser from '../hooks/use-User'
 import * as ROUTES from '../routes/routes'
-import navigate from '../utils/navigate'
 import { useNavigate } from 'react-router-dom'
 import isOnChat from '../context/isOnChat'
 
@@ -37,8 +36,7 @@ export default function NavBarMobile() {
       elevation={10}
       sx={{
         position: 'fixed',
-        display: userLocal ? 'flex' : 'none',
-        display: res[1] === 'vids' && 'none',
+        display: userLocal ? (res[1] === 'vids' ? 'none' : 'flex') : 'none',
         flexDirection: { xs: 'row', sm: 'column' },
         alignItems: { xs: 'center', sm: 'flex-start' },
         justifyContent: { xs: 'space-between', sm: 'flex-start' },
@@ -50,7 +48,6 @@ export default function NavBarMobile() {
         width: { xs: '100vw', sm: '10vw', md: '15vw' },
         height: { xs: '3.4rem', sm: '100vh' },
         bgcolor: '#ffffff ',
-        // backdropFilter:'blur(6px)',
         borderTopRightRadius: { xs: ' 25px', sm: '45px' },
         borderTopLeftRadius: { xs: ' 25px', sm: '0' },
         borderBottomRightRadius: { xs: ' 0', sm: '45px' },
@@ -63,14 +60,12 @@ export default function NavBarMobile() {
           display: 'flex',
           justifyContent: { xs: '', sm: 'center', md: 'flex-start' },
           gap: '2rem',
-
           alignItems: { xs: 'center', sm: 'center' },
           width: { xs: '40px', sm: '100%' },
           height: { xs: '100%', sm: '50px' },
           background: menu === 1 ? '##858585c8' : '',
           p: 0,
           pl: { xs: '0', sm: '0', md: '2rem' },
-
           fontSize: '25px',
           color: menu === 1 ? '#000000' : '#858585c8',
           bgcolor: { xs: '#ffffff6', sm: menu === 1 ? '#ddd6d6d7' : '' },
